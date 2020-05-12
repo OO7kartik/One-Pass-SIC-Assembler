@@ -92,8 +92,7 @@ int main() {
     }
     else if(opcode == BYTE) {
         int length;
-        string objcode;
-        getEntitiesOfConst(operand, length, objcode); // find length of constant (could be hex[ X'...' ] or char[ C'...' ])
+        string objcode = getEntitiesOfConst(operand, length); // find length of constant (could be hex[ X'...' ] or char[ C'...' ])
                                                       // convert constant to object code 
         locctr += length;
         
@@ -122,7 +121,7 @@ int main() {
   if(opcode == END) {
     object_program.push_back({1, "E^" + symtab.address(START)});
     //handle when characters are less, ie add padding
-    object_program[0].second += "^" + to_hex(locctr-stoi(symtab.address(START)));
+    object_program[0].second += "^" + toHex(locctr-stoi(symtab.address(START)));
   }
 
 

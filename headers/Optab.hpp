@@ -3,7 +3,7 @@ private:
   map<string, string> code;
 public:
   Optab();
-  string get_code(string opcode);
+  string getCode(string opcode);
   void displayOptab();
 };
 
@@ -26,6 +26,6 @@ void Optab::displayOptab() {
   }
 }
 
-string Optab::get_code(string opcode) {
+string Optab::getCode(string opcode) {
   return code[opcode];
 }

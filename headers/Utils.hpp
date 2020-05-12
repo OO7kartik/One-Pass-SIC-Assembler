@@ -60,3 +60,22 @@ bool canAccomodate(const string &current_record, int length) {
   }
   return true;
 }
+
+string getEntitiesOfConst(const string& operand, int &length) {
+  lengthOfConst(operand, length);
+
+  string to_ret = "";
+  if(operand[0] == 'X') {
+    to_ret = operand.substr(2, operand.size()-3);
+  }
+  else {
+    for(int i = 2; i < operand.size()-1; i++) {
+      int ascii_val = operand[i];
+      string object_code = toHex(ascii_val);
+
+      to_ret += (string(2-object_code.size(), '0') + object_code);
+    }
+  }
+
+  return to_ret;
+}

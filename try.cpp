@@ -17,6 +17,7 @@ int main() {
 
   Parser parser("Files/input_program.txt");
   Symtab symtab;
+  Optab optab;
 
 
   // tried starting some work
@@ -39,65 +40,30 @@ int main() {
           for(int i = 1; i < found_symbol_list.size(); i++) {
               // WRITE NEW TEXT RECORD ?
           }
+
         }
-
-      } //what if entry not found???
-      /*
-
-        vector<string> foundSymbolList = SYMTAB[LABEL]; // search SYMTAB for LABEL
-                                                        // ## NOTE return value as per implementation
-
-        if(!foundSymbolList.empty()) // if found (entry exists)
-        {
-            if(foundSymbolList[0]=="NULL") // if symbol value is NULL
-            {
-                // END PREV RECORD IF INCOMPLETE ?
-
-                foundSymbolList[0] = LOCCTR;
-                for (int i = 1; i < foundSymbolList.size(); i++) // traverse list
-                {
-                    // WRITE NEW TEXT RECORD ?
-                }
-                // Update SYMTAB ?
-            }
-            else
-            {
-                SYMTAB[LABEL] = vector<string>({to_string(LOCCTR)}); // insert (LABEL, LOCCTR) into SYMTAB
-            }
+        else {
+          cerr << "label already exist in symtab, can't redefine" << endl;
         }
-
-      */
-
+      } 
+      symtab.insert(label, to_string(locctr), true);
     }
 
     /*
       string code = OPTAB[OPCODE]; // search OPTAB for OPCODE
     */
     if(opcode != EMPTY_STRING) {
+      string code = optab.getCode(opcode);
+      string operand_address = symtab.address(operand);
 
-    /*
+      if(operand_address != NOT_FOUND) {
+        // store value as oeprand address ?
+      }
+      else {
+        symtab.insert(operand, to_string(locctr));
+      }
 
-    vector<string> foundSymbolList = SYMTAB[OPERAND]; // search SYMTAB for OPERAND address
-
-    if(!foundSymbolList.empty()) // if found (entry exists)
-    {
-        if(foundSymbolList[0]!="NULL") // if symbol value is not NULL
-        {
-            // store symbol value as OPERAND address ?
-        }
-        else
-        {
-            foundSymbolList.push_back(to_string(LOCCTR)); // insert LOCCTR at end of LL
-        }
-    }
-    else
-    {
-        SYMTAB[LABEL] = vector<string>({"NULL"}); // insert (LABEL, null) into SYMTAB
-    }
-    LOCCTR += 3;
-
-    */
-
+      locctr += 3;
     }
     else if(opcode == WORD) {
       locctr += 3;
@@ -140,7 +106,7 @@ int main() {
   if(opcode == END) {
     object_program.push_back({1, "E^" + symtab.address(START)});
     //handle when characters are less, ie add padding
-    object_program[0].second += "^" + to_hex(locctr-stoi(symtab.address(START)));
+    object_program[0].second += "^" + toHex(locctr-stoi(symtab.address(START)));
   }
 
 
