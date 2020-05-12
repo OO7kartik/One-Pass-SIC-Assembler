@@ -6,6 +6,7 @@ public:
   int insert(string label, string adr_or_label, bool is_second_param_label);
   int check(string label);
   string address(string label);
+  vector<string> getLinkedList(string label);
   void print();
 }; 
 
@@ -76,4 +77,8 @@ void Symtab::print() {
     }
     cerr << endl;
   }
+}
+
+vector<string> Symtab::getLinkedList(string label) {
+  return table[label];
 }

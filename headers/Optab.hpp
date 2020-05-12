@@ -3,6 +3,7 @@ private:
   map<string, string> code;
 public:
   Optab();
+  string get_code(string opcode);
   void displayOptab();
 };
 
@@ -23,4 +24,8 @@ void Optab::displayOptab() {
   for(auto itr : code) {
     cerr << itr.first << " " << itr.second << endl;
   }
+}
+
+string Optab::get_code(string opcode) {
+  return code[opcode];
 }
