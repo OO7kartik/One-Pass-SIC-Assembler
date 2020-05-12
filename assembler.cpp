@@ -99,7 +99,7 @@ int main() {
 
     /*
 
-    if("object code will not fit in current text record ? " 1)
+    if("object code will not fit in current text record ? ")
     {
         // Write current text record to object program (file) ?
         // init new text record ?
@@ -107,20 +107,19 @@ int main() {
     
     // Add object code to text record ?
 
-    // write last text record ?
-    // write end record ?
-    // write last listing line ????
-
-
     */
 
     parser.getEntities(label, opcode, operand);
   }
-  if(opcode == END) {
-    object_program.push_back({1, "E^" + symtab.address(START)});
-    //handle when characters are less, ie add padding
-    object_program[0].second += "^" + toHex(locctr-stoi(symtab.address(START)));
-  }
+
+  // write last text record ?
+  // write end record ?
+  // write last listing line ????
+
+  // opcode == END at this point
+  object_program.push_back({1, "E^" + symtab.address(START)});
+  //handle when characters are less, ie add padding
+  object_program[0].second += "^" + toHex(locctr-stoi(symtab.address(START)));
 
 
   
