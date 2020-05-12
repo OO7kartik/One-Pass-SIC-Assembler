@@ -3,7 +3,7 @@ private:
   map<string, vector<string>> table;
 public:
   Symtab();
-  int insert(string label, string adr_or_label, bool is_second_param_label);
+  int insert(string label, string adr, bool force);
   int check(string label);
   string address(string label);
   vector<string> getLinkedList(string label);
@@ -17,46 +17,33 @@ Symtab::Symtab() {
 /*
 returns 
   0: symbol not in symtab
-  1: symbol encountered, address NOT_FOUND
-  2: symbol already exist
+  1: symbol already exist
 */
 int Symtab::check(string label) {
   if(table.find(label) != table.end()) {
-    if(table[label][0] == NOT_FOUND) {
-      return 1;
-    }
-    return 2;
+    return 1;
   }
   return 0;
 }
 
-int Symtab::insert(string label, string adr_or_label, bool is_second_param_label = false) {
+
+int Symtab::insert(string label, string adr = NOT_FOUND, bool force = false) {
   int situation = check(label);
 
-  // symbol found in symtab
-  if(situation == 2) {
-    if(table[label][0] == NOT_FOUND) { // found symbol's address is NOT_FOUND
-      if(is_second_param_label) {
-        table[label].push_back(adr_or_label); /// add this label as it depends on label's address (fwdref)
-      }
-      else {
-        // solve all forward reference problems for this label
-        //TODO
-        //handle stuff
-        table[label] = {adr_or_label}; // overwrite this list to current address
-      }
-    }
-    else { // found symbol already has an address ERROR
-      cerr << "symbol already present in symtab" << endl;
-      return 0;
-    }
+  if(force) {
+    table[label] = {adr};
   }
-  else { // symbol does not exist, or symbol's address not found.
-    table[label].push_back(adr_or_label);
+  else if(situation == 2 && table[label][0] != NOT_FOUND) {
+    cerr << "symbol already present in symtab" << endl;
+    return 0;
+  }
+  else {
+    table[label].push_back(adr);
   }
 
   return 1;
 }
+
 
 string Symtab::address(string label) {
   int situation = check(label);
@@ -69,6 +56,11 @@ string Symtab::address(string label) {
 }
 
 
+vector<string> Symtab::getLinkedList(string label) {
+  return table[label];
+}
+
+
 void Symtab::print() {
   for(pair<string, vector<string>> itr : table) {
     cerr << itr.first << ": ";
@@ -77,8 +69,4 @@ void Symtab::print() {
     }
     cerr << endl;
   }
-}
-
-vector<string> Symtab::getLinkedList(string label) {
-  return table[label];
 }
