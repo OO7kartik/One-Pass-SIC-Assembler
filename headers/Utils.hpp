@@ -5,6 +5,10 @@ const string NOT_FOUND    = "***";
 const string START        = "START";
 const string END          =  "END"; 
 const string EMPTY_STRING = "";
+const string WORD         = "WORD";
+const string RESW         = "RESW";
+const string RESB         = "RESB";
+const string BYTE         = "BYTE";
 
 
 /*
