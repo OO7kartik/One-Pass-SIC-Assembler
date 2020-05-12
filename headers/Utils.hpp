@@ -1,7 +1,10 @@
 /*
   CONSTANTS
 */
-const string NOTFOUND = "***";
+const string NOT_FOUND    = "***";
+const string START        = "START";
+const string END          =  "END"; 
+const string EMPTY_STRING = "";
 
 
 /*
@@ -18,4 +21,10 @@ void removeExtraSpaces(string& line) {
     result += line[i];
   }
   line = result;
+}
+
+string to_hex(int s) {
+  stringstream ss;
+  ss << hex << s;
+  return ss.str();
 }
