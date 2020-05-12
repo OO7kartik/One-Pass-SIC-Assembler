@@ -67,7 +67,7 @@ int main() {
       {
           if(symtab.check(label) != 1) // if symbol value is not NULL
           {
-              // store symbol value as OPERAND address ?
+              // store symbol value as OPERAND address ? string symbolval = ...; objcode = concat(opcode, symbolval)
           }
           else
           {
@@ -82,6 +82,7 @@ int main() {
 
     }
     else if(opcode == WORD) {
+      // convert operand(dec) to object code ? objcode = stoi(operand) 
       locctr += 3;
     }
     else if(opcode == RESW) {
@@ -92,11 +93,8 @@ int main() {
     }
     else if(opcode == BYTE) {
         int length;
-        string objcode = getEntitiesOfConst(operand, length); // find length of constant (could be hex[ X'...' ] or char[ C'...' ])
-                                                      // convert constant to object code 
+        string objcode = getEntitiesOfConst(operand, length); // find length of const, convert const to object code 
         locctr += length;
-        
-
     }
 
     /*
