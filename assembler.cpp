@@ -17,7 +17,7 @@ int main() {
 
   Parser parser("Files/input_program.txt");
   Symtab symtab;
-
+  Optab optab;
 
   // tried starting some work
   parser.getEntities(label, opcode, operand);
@@ -31,61 +31,54 @@ int main() {
   while(opcode != END) {
     if(label != EMPTY_STRING) {
 
-      /*
-
-        vector<string> foundSymbolList = SYMTAB[LABEL]; // search SYMTAB for LABEL
+        // vector<string> foundSymbolList = SYMTAB[LABEL]; // search SYMTAB for LABEL
                                                         // ## NOTE return value as per implementation
 
-        if(!foundSymbolList.empty()) // if found (entry exists)
+        if(symtab.check(label) != 0) // if found (entry exists)
         {
-            if(foundSymbolList[0]=="NULL") // if symbol value is NULL
+            if(symtab.check(label) == 1) // if symbol value is NULL
             {
                 // END PREV RECORD IF INCOMPLETE ?
 
-                foundSymbolList[0] = LOCCTR;
-                for (int i = 1; i < foundSymbolList.size(); i++) // traverse list
+                // foundSymbolList[0] = LOCCTR; // set LOCCTR as symbol value ?
+                vector<string> list = symtab.getLinkedList(label);
+
+                for (int i = 1; i < list.size(); i++) // traverse list
                 {
                     // WRITE NEW TEXT RECORD ?
                 }
-                // Update SYMTAB ?
+                // Update SYMTAB ? ========> combined [1]
             }
             else
             {
-                SYMTAB[LABEL] = vector<string>({to_string(LOCCTR)}); // insert (LABEL, LOCCTR) into SYMTAB
+                // SYMTAB[LABEL] = vector<string>({to_string(LOCCTR)}); // insert (LABEL, LOCCTR) into SYMTAB ========> combined [2]
             }
+            symtab.insert(label, to_string(locctr), true); // Update SYMTAB, force[=true] delete linked list if any <========= here [1,2]
         }
-
-      */
-
     }
 
-    /*
-      string code = OPTAB[OPCODE]; // search OPTAB for OPCODE
-    */
+    string code = optab.getCode(opcode); // search OPTAB for OPCODE
+
     if(opcode != EMPTY_STRING) {
 
-    /*
+      // vector<string> foundSymbolList = SYMTAB[OPERAND]; // search SYMTAB for OPERAND address
 
-    vector<string> foundSymbolList = SYMTAB[OPERAND]; // search SYMTAB for OPERAND address
-
-    if(!foundSymbolList.empty()) // if found (entry exists)
-    {
-        if(foundSymbolList[0]!="NULL") // if symbol value is not NULL
-        {
-            // store symbol value as OPERAND address ?
-        }
-        else
-        {
-            foundSymbolList.push_back(to_string(LOCCTR)); // insert LOCCTR at end of LL
-        }
-    }
-    else
-    {
-        SYMTAB[LABEL] = vector<string>({"NULL"}); // insert (LABEL, null) into SYMTAB
-    }
-    LOCCTR += 3;
-
-    */
+      if(symtab.check(label) != 0) // if found (entry exists)
+      {
+          if(symtab.check(label) != 1) // if symbol value is not NULL
+          {
+              // store symbol value as OPERAND address ?
+          }
+          else
+          {
+              symtab.insert(label, to_string(locctr), false); // insert LOCCTR at end of LL
+          }
+      }
+      else
+      {
+          symtab.insert(label, to_string(locctr), false); // insert (LABEL, null) into SYMTAB (and also the ref addr)
+      }
+      locctr+= 3;
 
     }
     else if(opcode == WORD) {
@@ -98,12 +91,12 @@ int main() {
       locctr += stoi(operand);
     }
     else if(opcode == BYTE) {
-
-      /*
-        // find length of constant (could be hex[ X'...' ] or char[ C'...' ])
-        // add length to LOCCTR
-        // convert constant to object code 
-      */
+        int length;
+        string objcode;
+        getEntitiesOfConst(operand, length, objcode); // find length of constant (could be hex[ X'...' ] or char[ C'...' ])
+                                                      // convert constant to object code 
+        locctr += length;
+        
 
     }
 
