@@ -45,6 +45,9 @@ int lengthOfConst(const string &character_const, int &length) {
 }
 
 int lengthOfTextRecord(const string &text_record) {
+  /*
+    :functionality: returns length of text_record
+  */
   int count = 0;
   for(int i = 1; i < text_record.size(); i++) {
     if(text_record[i] != '^') {
@@ -55,6 +58,9 @@ int lengthOfTextRecord(const string &text_record) {
 }
 
 bool canAccomodate(const string &current_record, int length) {
+  /*
+    :functionality: returns true if current_record can accomodate an object code of size length
+  */
   if(lengthOfTextRecord(current_record) + length > 30) {
     return false;
   }
@@ -78,4 +84,19 @@ string getEntitiesOfConst(const string& operand, int &length) {
   }
 
   return to_ret;
+}
+
+
+void writeTextRecord(vector<string> &object_program, const string &object_code, const string &locctr, bool force_new_record = false) {
+  /*
+    function that handles inserting in text record, takes care of all cases
+  */
+
+  if(force_new_record == false && canAccomodate(object_program[object_program.size()-1], object_code.length())) {
+    object_program[object_program.size()-1] += "^" + object_code;
+  } 
+  else { // create new text_record       [create new reocrd when]: (size exeeds or forward reference aka:force_new_record)
+    object_program.push_back("T^" + locctr + "^" + object_code);
+  }
+
 }

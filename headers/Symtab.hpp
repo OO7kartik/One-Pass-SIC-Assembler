@@ -33,7 +33,7 @@ int Symtab::insert(string label, string adr = NOT_FOUND, bool force = false) {
   if(force) {
     table[label] = {adr};
   }
-  else if(situation == 2 && table[label][0] != NOT_FOUND) {
+  else if(situation == 1 && table[label][0] != NOT_FOUND) {
     cerr << "symbol already present in symtab" << endl;
     return 0;
   }
