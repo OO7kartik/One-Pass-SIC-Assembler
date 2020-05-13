@@ -40,7 +40,8 @@ int Symtab::insert(string label, string adr = NOT_FOUND, bool force = false) {
   else {
     table[label].push_back(adr);
   }
-
+  // print();
+  // cerr << "-------" << endl;
   return 1;
 }
 
@@ -65,7 +66,7 @@ void Symtab::print() {
   for(pair<string, vector<string>> itr : table) {
     cerr << itr.first << ": ";
     for(string s : itr.second) {
-      cerr << "-" << s << " ";
+      cerr << " - " << s << " ";
     }
     cerr << endl;
   }

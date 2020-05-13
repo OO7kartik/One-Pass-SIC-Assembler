@@ -1,48 +1,68 @@
--------------INPUT PROGRAM-----------
-COPY   START  1000   
-EOF    BYTE   C'EOF' 
-THREE  WORD   3      
-ZERO   WORD   0      
-RETADR RESW   1      
-LENGTH RESW   1      
-BUFFER RESB   4096   
-FIRST  STL    RETADR 
-CLOOP  JSUB   RDREC  
-       LDA    LENGTH 
-       COMP   ZERO   
-       JEQ    ENDFIL 
-       JSUB   WRREC  
-       J      CLOOP  
-ENDFIL LDA    EOF    
-       STA    BUFFER 
-       LDA    THREE  
-       STA    LENGTH 
-       JSUB   WRREC  
-       LDL    RETADR 
-       RSUB          
-INPUT  BYTE   X'F1'  
-MAXLEN WORD   4096   
-                     
-RDREC  LDX    ZERO   
-       LDA    ZERO   
-RLOOP  TD     INPUT  
-       JEQ    RLOOP  
-       RD     INPUT  
-       COMP   ZERO   
-       JEQ    EXIT   
-       STCH   BUFFER,X
-       TIX    MAXLEN 
-       JLT    RLOOP  
-EXIT   STX    LENGTH 
-       RSUB          
-OUTPUT BYTE   X'05'  
-WRREC  LDX    ZERO   
-WLOOP  TD     OUTPUT 
-       JEQ    WLOOP  
-       LDCH   BUFFER,X
-       WD     OUTPUT 
-       TIX    LENGTH 
-       JST    WLOOP  
-       RSUB          
-       END    FIRST  
--------------------------------------
+2037
+For ENDFIL
+BUFFER:  - 4111 
+CLOOP:  - 8210 
+ENDFIL:  - ***  - 8220 
+EOF:  - 4096 
+FIRST:  - 8207 
+LENGTH:  - 4108 
+RDREC:  - ***  - 8211 
+RETADR:  - 4105 
+START:  - 4096 
+THREE:  - 4099 
+WRREC:  - ***  - 8223 
+ZERO:  - 4102 
+-------
+For RDREC
+BUFFER:  - 4111 
+CLOOP:  - 8210 
+ENDFIL:  - 8228 
+EOF:  - 4096 
+FIRST:  - 8207 
+INPUT:  - 8249 
+LENGTH:  - 4108 
+MAXLEN:  - 8250 
+RDREC:  - ***  - 8211 
+RETADR:  - 4105 
+START:  - 4096 
+THREE:  - 4099 
+WRREC:  - ***  - 8223  - 8241 
+ZERO:  - 4102 
+-------
+For EXIT
+BUFFER:  - 4111 
+CLOOP:  - 8210 
+ENDFIL:  - 8228 
+EOF:  - 4096 
+EXIT:  - ***  - 8272 
+FIRST:  - 8207 
+INPUT:  - 8249 
+LENGTH:  - 4108 
+MAXLEN:  - 8250 
+RDREC:  - 8253 
+RETADR:  - 4105 
+RLOOP:  - 8259 
+START:  - 4096 
+THREE:  - 4099 
+WRREC:  - ***  - 8223  - 8241 
+ZERO:  - 4102 
+-------
+For WRREC
+BUFFER:  - 4111 
+CLOOP:  - 8210 
+ENDFIL:  - 8228 
+EOF:  - 4096 
+EXIT:  - 8283 
+FIRST:  - 8207 
+INPUT:  - 8249 
+LENGTH:  - 4108 
+MAXLEN:  - 8250 
+OUTPUT:  - 8289 
+RDREC:  - 8253 
+RETADR:  - 4105 
+RLOOP:  - 8259 
+START:  - 4096 
+THREE:  - 4099 
+WRREC:  - ***  - 8223  - 8241 
+ZERO:  - 4102 
+-------

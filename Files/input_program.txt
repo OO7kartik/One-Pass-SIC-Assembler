@@ -25,7 +25,11 @@ ENDFIL LDA    EOF
        .
 INPUT  BYTE   X'F1'
 MAXLEN WORD   4096
+<<<<<<< HEAD
 
+=======
+       .
+>>>>>>> 8c6d972d2b82581246e1dd19404e4dc42f0690b1
 RDREC  LDX    ZERO
        LDA    ZERO
 RLOOP  TD     INPUT
@@ -49,6 +53,10 @@ WLOOP  TD     OUTPUT
        LDCH   BUFFER,X
        WD     OUTPUT
        TIX    LENGTH
+<<<<<<< HEAD
        JST    WLOOP
+=======
+       JLT    WLOOP
+>>>>>>> 8c6d972d2b82581246e1dd19404e4dc42f0690b1
        RSUB
        END    FIRST
