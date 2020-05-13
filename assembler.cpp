@@ -13,7 +13,7 @@ int main() {
 
   int locctr = 0;
   string label, opcode, operand;
-  vector<pair<int,string>> object_program; //int: counts number of '^', string contains records
+  vector<string> object_program; //int: counts number of '^', string contains records
 
   Parser parser("Files/input_program.txt");
   Symtab symtab;
@@ -25,7 +25,7 @@ int main() {
     locctr = stoi(operand);
   }
   symtab.insert(START, to_string(locctr));
-  object_program.push_back({2, "H^" + opcode + "^00" + symtab.address(START)});
+  object_program.push_back("H^" + opcode + "^00" + symtab.address(START));
 
   parser.getEntities(label, opcode, operand);
   while(opcode != END) {
@@ -117,9 +117,9 @@ int main() {
   // write last listing line ????
 
   // opcode == END at this point
-  object_program.push_back({1, "E^" + symtab.address(START)});
+  object_program.push_back("E^" + symtab.address(START));
   //handle when characters are less, ie add padding
-  object_program[0].second += "^" + toHex(locctr-stoi(symtab.address(START)));
+  object_program[0] += "^" + toHex(locctr-stoi(symtab.address(START)));
 
 
   
