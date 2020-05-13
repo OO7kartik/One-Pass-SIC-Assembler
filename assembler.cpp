@@ -12,9 +12,9 @@ int main() {
   freopen("object_program.txt", "w", stdout);
 
   int locctr = 0;
-  bool isIndexed;
+  bool isIndexed, force_new = false;
   string label, opcode, operand, objcode, symbolval;
-  vector<pair<int,string>> object_program; //int: counts number of '^', string contains records
+  vector<string> object_program; //int: counts number of '^', string contains records
 
   Parser parser("Files/input_program.txt");
   Symtab symtab;
@@ -27,10 +27,11 @@ int main() {
 
   if(opcode == "START") {
     locctr = toDec(operand);
-    // cout << "LOC: " << locctr << endl;
+    // cout << "LOC: " << locctr << endl; 
   }
   symtab.insert(START, to_string(locctr));
-  object_program.push_back("H^" + opcode + "^00" + symtab.address(START));
+  object_program.push_back("H^" + opcode + "^00" + toHex(stoi(symtab.address(START))));
+  object_program.push_back("T^" + padWithZeroes(toHex(locctr), 6) + "^00");
 
   parser.getEntities(label, opcode, operand);
   while(opcode != END) {
@@ -64,6 +65,7 @@ int main() {
                 {
                     cout << "Replace " << toHex(stoi(list[i])) << endl;
                     // WRITE NEW TEXT RECORD ?
+                    writeTextRecord(object_program, toHex(locctr), toHex(stoi(list[i])), true);
                 }
                 // Update SYMTAB ?
             }
@@ -84,7 +86,7 @@ int main() {
     if(code != EMPTY_STRING) {
       // vector<string> foundSymbolList = SYMTAB[OPERAND]; // search SYMTAB for OPERAND address
 
-      if(operand!=EMPTY_STRING)
+      if(operand!=EMPTY_STRING) {
         if(symtab.check(operand) != 0) // if found (entry exists)
         {
             // cout << "Operand label found " << operand << endl;
@@ -110,6 +112,7 @@ int main() {
             // cerr << "+++" << endl;
             // symbolval = string(4, '0');
         }
+      }
       locctr+= 3;
       objcode = code + symbolval;
     }
@@ -143,6 +146,8 @@ int main() {
     // Add object code to text record ?
 
     */
+
+    
     if(isIndexed) {
       int value = toDec(objcode);
       value += toDec("8000");
@@ -150,6 +155,18 @@ int main() {
     }
     cout << "OBJCODE: " 
           << ((opcode.substr(0, 3) == "RES")? "SKIP" : objcode) << endl;
+
+    if(opcode.substr(0, 3) != "RES") {
+      cout << "writing: --- " << objcode << endl;
+      if(force_new) {
+        object_program.push_back("T^" + padWithZeroes(toHex(locctr), 6) + "^00^" + padWithZeroes(objcode, 6));
+        force_new = false;
+      }
+      else writeTextRecord(object_program, objcode, toHex(locctr));
+    } 
+    else {
+      force_new = true;
+    }
 
     parser.getEntities(label, opcode, operand);
   }
@@ -159,9 +176,11 @@ int main() {
   // write last listing line ????
 
   // opcode == END at this point
-  object_program.push_back("E^" + symtab.address(START));
+  object_program.push_back("E^" + padWithZeroes(toHex(stoi(symtab.address(START))), 6));
   //handle when characters are less, ie add padding
-  object_program[0] += "^" + toHex(locctr-stoi(symtab.address(START)));
+  object_program[0] += "^" + padWithZeroes(toHex(locctr-stoi(symtab.address(START))), 6);
+  
+  vectorToFile(object_program, "answer.txt");
 
 
   

@@ -25,7 +25,7 @@ int Parser::getEntities(string &label, string &opcode, string &operand) {
   if(!getline(input, _line)) {
     return 0;
   } 
-  if(_line.find('.') != string::npos) {
+  if(_line.find('.') != string::npos || _line == "") {
     return getEntities(label, opcode, operand);
   }
   removeExtraSpaces(_line);

@@ -64,14 +64,14 @@ int lengthOfTextRecord(const string &text_record) {
       count++;
     }
   }
-  return count;
+  return count-8;
 }
 
 bool canAccomodate(const string &current_record, int length) {
   /*
     :functionality: returns true if current_record can accomodate an object code of size length
   */
-  if(lengthOfTextRecord(current_record) + length > 30) {
+  if(lengthOfTextRecord(current_record) + length > 60) {
     return false;
   }
   return true;
@@ -97,28 +97,6 @@ string getEntitiesOfConst(const string& operand, int &length) {
 }
 
 
-void writeTextRecord(vector<string> &object_program, const string &object_code, const string &locctr, bool force_new_record = false) {
-  /*
-    function that handles inserting in text record, takes care of all cases
-  */
-
-  if(force_new_record == false && canAccomodate(object_program[object_program.size()-1], object_code.length())) {
-    object_program[object_program.size()-1] += "^" + object_code;
-  } 
-  else { // create new text_record       [create new reocrd when]: (size exeeds or forward reference aka:force_new_record)
-    object_program.push_back("T^" + locctr + "^" + object_code);
-  }
-
-}
-
-void vectorToFile(vector<string> &v, string file_name) {
-  ofstream output_file(file_name);
-
-  for(string s : v) {
-    output_file << s << endl;
-  }
-
-  output_file.close();
 string padWithZeroes(const string& s, int length) {
   int lengthToPad = max(0UL, length - s.length());
   return string(lengthToPad, '0') + s;
@@ -131,4 +109,45 @@ bool nonIndexify(string& operand) {
     return true;
   }
   return false;
+}
+
+
+void updateTextRecordSize(string &text_record) {
+  string hex_length = toHex(lengthOfTextRecord(text_record)/2);
+  hex_length = padWithZeroes(hex_length, 2);
+
+  text_record[9] = hex_length[0];
+  text_record[10] = hex_length[1];
+}
+
+
+void writeTextRecord(vector<string> &object_program, const string &object_code, const string &locctr, bool force_new_record = false) {
+  /*
+    function that handles inserting in text record, takes care of all cases
+  */
+
+  static bool break_next_record = false;
+
+
+  if(break_next_record == false && force_new_record == false && canAccomodate(object_program[object_program.size()-1], object_code.length())) {
+    object_program[object_program.size()-1] += "^" + padWithZeroes(object_code, 6);
+    updateTextRecordSize(object_program[object_program.size()-1]);
+  } 
+  else { // create new text_record       [create new reocrd when]: (size exeeds or forward reference aka:force_new_record)
+    object_program.push_back("T^" + padWithZeroes(locctr, 6) + "^00^" + padWithZeroes(object_code, 6-2*force_new_record));
+    updateTextRecordSize(object_program[object_program.size()-1]);
+
+    break_next_record = force_new_record;
+  }
+
+}
+
+void vectorToFile(vector<string> &v, string file_name) {
+  ofstream output_file(file_name);
+
+  for(string s : v) {
+    output_file << s << endl;
+  }
+
+  output_file.close();
 }
