@@ -100,3 +100,13 @@ void writeTextRecord(vector<string> &object_program, const string &object_code, 
   }
 
 }
+
+void vectorToFile(vector<string> &v, string file_name) {
+  ofstream output_file(file_name);
+
+  for(string s : v) {
+    output_file << s << endl;
+  }
+
+  output_file.close();
+}

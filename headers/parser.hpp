@@ -25,11 +25,11 @@ int Parser::getEntities(string &label, string &opcode, string &operand) {
   if(!getline(input, _line)) {
     return 0;
   } 
-  if(_line[0] == '.') {
+  if(_line.find('.') != string::npos) {
     return getEntities(label, opcode, operand);
   }
   removeExtraSpaces(_line);
-  label = opcode = operand = "";
+  _label = _opcode = _operand = "";
   
   stringstream ss(_line);
   getline(ss, _label, ' ');
