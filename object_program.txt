@@ -1,0 +1,194 @@
+
+Label: EOF
+EOF: Symbol value is updated to 1000
+LOC: 1000
+OBJCODE: 454F46
+
+Label: THREE
+THREE: Symbol value is updated to 1003
+LOC: 1003
+OBJCODE: 000003
+
+Label: ZERO
+ZERO: Symbol value is updated to 1006
+LOC: 1006
+OBJCODE: 000000
+
+Label: RETADR
+RETADR: Symbol value is updated to 1009
+LOC: 1009
+OBJCODE: SKIP
+
+Label: LENGTH
+LENGTH: Symbol value is updated to 100C
+LOC: 100C
+OBJCODE: SKIP
+
+Label: BUFFER
+BUFFER: Symbol value is updated to 100F
+LOC: 100F
+OBJCODE: SKIP
+
+Label: FIRST
+FIRST: Symbol value is updated to 200F
+LOC: 200F
+OBJCODE: 141009
+
+Label: CLOOP
+CLOOP: Symbol value is updated to 2012
+LOC: 2012
+OBJCODE: 480000
+
+Label: 
+LOC: 2015
+OBJCODE: 00100C
+
+Label: 
+LOC: 2018
+OBJCODE: 281006
+
+Label: 
+LOC: 201B
+OBJCODE: 300000
+
+Label: 
+LOC: 201E
+OBJCODE: 480000
+
+Label: 
+LOC: 2021
+OBJCODE: 3C2012
+
+Label: ENDFIL
+Entry exists for ENDFIL
+Replace 201C
+LOC: 2024
+OBJCODE: 001000
+
+Label: 
+LOC: 2027
+OBJCODE: 0C100F
+
+Label: 
+LOC: 202A
+OBJCODE: 001003
+
+Label: 
+LOC: 202D
+OBJCODE: 0C100C
+
+Label: 
+LOC: 2030
+OBJCODE: 480000
+
+Label: 
+LOC: 2033
+OBJCODE: 081009
+
+Label: 
+LOC: 2036
+OBJCODE: 4C0000
+
+Label: INPUT
+INPUT: Symbol value is updated to 2039
+LOC: 2039
+OBJCODE: F1
+
+Label: MAXLEN
+MAXLEN: Symbol value is updated to 203A
+LOC: 203A
+OBJCODE: 001000
+
+Label: RDREC
+Entry exists for RDREC
+Replace 2013
+LOC: 203D
+OBJCODE: 041006
+
+Label: 
+LOC: 2040
+OBJCODE: 001006
+
+Label: RLOOP
+RLOOP: Symbol value is updated to 2043
+LOC: 2043
+OBJCODE: E02039
+
+Label: 
+LOC: 2046
+OBJCODE: 302043
+
+Label: 
+LOC: 2049
+OBJCODE: D82039
+
+Label: 
+LOC: 204C
+OBJCODE: 281006
+
+Label: 
+LOC: 204F
+OBJCODE: 300000
+
+Label: 
+LOC: 2052
+OBJCODE: 54900F
+
+Label: 
+LOC: 2055
+OBJCODE: 2C203A
+
+Label: 
+LOC: 2058
+OBJCODE: 382043
+
+Label: EXIT
+Entry exists for EXIT
+Replace 2050
+LOC: 205B
+OBJCODE: 10100C
+
+Label: 
+LOC: 205E
+OBJCODE: 4C0000
+
+Label: OUTPUT
+OUTPUT: Symbol value is updated to 2061
+LOC: 2061
+OBJCODE: 05
+
+Label: WRREC
+Entry exists for WRREC
+Replace 201F
+Replace 2031
+LOC: 2062
+OBJCODE: 041006
+
+Label: WLOOP
+WLOOP: Symbol value is updated to 2065
+LOC: 2065
+OBJCODE: E02061
+
+Label: 
+LOC: 2068
+OBJCODE: 302065
+
+Label: 
+LOC: 206B
+OBJCODE: 50900F
+
+Label: 
+LOC: 206E
+OBJCODE: DC2061
+
+Label: 
+LOC: 2071
+OBJCODE: 2C100C
+
+Label: 
+LOC: 2074
+OBJCODE: 382065
+
+Label: 
+LOC: 2077
+OBJCODE: 4C0000

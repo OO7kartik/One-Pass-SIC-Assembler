@@ -12,88 +12,123 @@ int main() {
   freopen("object_program.txt", "w", stdout);
 
   int locctr = 0;
-  string label, opcode, operand;
+  bool isIndexed;
+  string label, opcode, operand, objcode, symbolval;
   vector<pair<int,string>> object_program; //int: counts number of '^', string contains records
 
   Parser parser("Files/input_program.txt");
   Symtab symtab;
   Optab optab;
 
+  cerr << toHex(8247) << endl;
+
   // tried starting some work
   parser.getEntities(label, opcode, operand);
-  if(opcode == START) {
-    locctr = stoi(operand);
+
+  if(opcode == "START") {
+    locctr = toDec(operand);
+    // cout << "LOC: " << locctr << endl;
   }
   symtab.insert(START, to_string(locctr));
   object_program.push_back({2, "H^" + opcode + "^00" + symtab.address(START)});
 
   parser.getEntities(label, opcode, operand);
   while(opcode != END) {
-    if(label != EMPTY_STRING) {
+    isIndexed = nonIndexify(operand);
+    symbolval = string(4, '0');
 
+    cout << "\nLabel: " << label << endl;
+
+    if(label != EMPTY_STRING) {
         // vector<string> foundSymbolList = SYMTAB[LABEL]; // search SYMTAB for LABEL
                                                         // ## NOTE return value as per implementation
 
         if(symtab.check(label) != 0) // if found (entry exists)
         {
+            cout << "Entry exists for " << label << endl;
             if(symtab.check(label) == 1) // if symbol value is NULL
             {
+                cerr << "For " << label << endl;
+                symtab.print();
+                cerr << "-------" << endl;
+                // cout << "Symbol value is NULL" << endl;
                 // END PREV RECORD IF INCOMPLETE ?
 
                 // foundSymbolList[0] = LOCCTR; // set LOCCTR as symbol value ?
+                symbolval = padWithZeroes(toHex(locctr), 6);
+                // cout << "Symbol value is updated to " << symbolval << endl;
+
                 vector<string> list = symtab.getLinkedList(label);
 
                 for (int i = 1; i < list.size(); i++) // traverse list
                 {
+                    cout << "Replace " << toHex(stoi(list[i])) << endl;
                     // WRITE NEW TEXT RECORD ?
                 }
-                // Update SYMTAB ? ========> combined [1]
+                // Update SYMTAB ?
+            }
+            // cout << "Symbol value is updated to " << to_string(locctr) << endl;
+            symtab.insert(label, to_string(locctr), true); // Update SYMTAB
+        }
+        else 
+        {
+          cout << label << ": Symbol value is updated to " << toHex(locctr) << endl;
+          symtab.insert(label, to_string(locctr), true);
+        }
+        objcode = symtab.address(label);
+    }
+    cout << "LOC: " << toHex(locctr) << endl;
+
+    string code = optab.getCode(opcode); // search OPTAB for OPCODE
+    // cout << "CODE: " << code << endl;
+    if(code != EMPTY_STRING) {
+      // vector<string> foundSymbolList = SYMTAB[OPERAND]; // search SYMTAB for OPERAND address
+
+      if(operand!=EMPTY_STRING)
+        if(symtab.check(operand) != 0) // if found (entry exists)
+        {
+            // cout << "Operand label found " << operand << endl;
+            if(symtab.address(operand) != NOT_FOUND) // if symbol value is not NULL
+            {
+                // cout << "OPERAND: " << operand << endl;
+                symbolval = toHex(stoi(symtab.address(operand))); // store symbol value as OPERAND address 
+                // cout << "Symbol value is updated to " << symbolval << endl;
+                // cout << "Symbol value is not NULL: " << symbolval << endl;
             }
             else
             {
-                // SYMTAB[LABEL] = vector<string>({to_string(LOCCTR)}); // insert (LABEL, LOCCTR) into SYMTAB ========> combined [2]
+                symtab.insert(operand, to_string(locctr+1), false); // insert LOCCTR at end of LL
+                // symbolval = string(4, '0');
             }
-            symtab.insert(label, to_string(locctr), true); // Update SYMTAB, force[=true] delete linked list if any <========= here [1,2]
         }
-    }
-
-    string code = optab.getCode(opcode); // search OPTAB for OPCODE
-
-    if(opcode != EMPTY_STRING) {
-
-      // vector<string> foundSymbolList = SYMTAB[OPERAND]; // search SYMTAB for OPERAND address
-
-      if(symtab.check(label) != 0) // if found (entry exists)
-      {
-          if(symtab.check(label) != 1) // if symbol value is not NULL
-          {
-              // store symbol value as OPERAND address ? string symbolval = ...; objcode = concat(opcode, symbolval)
-          }
-          else
-          {
-              symtab.insert(label, to_string(locctr), false); // insert LOCCTR at end of LL
-          }
-      }
-      else
-      {
-          symtab.insert(label, to_string(locctr), false); // insert (LABEL, null) into SYMTAB (and also the ref addr)
-      }
+        else
+        {
+            // cout << "Operand label not found " << operand << endl;
+            symtab.insert(operand); // insert (LABEL, null) 
+            symtab.insert(operand, to_string(locctr+1) );
+            // symtab.print();
+            // cerr << "+++" << endl;
+            // symbolval = string(4, '0');
+        }
       locctr+= 3;
-
+      objcode = code + symbolval;
     }
     else if(opcode == WORD) {
-      // convert operand(dec) to object code ? objcode = stoi(operand) 
+      // convert operand(dec) to object code ? 
+      objcode = padWithZeroes(toHex(stoi(operand)), 6);
       locctr += 3;
     }
     else if(opcode == RESW) {
+      // cout << "RESW adding " << 3 * stoi(operand) << " to locctr" << endl;
       locctr += (3 * stoi(operand));
     }
     else if(opcode == RESB) {
+      // cout << "RESB adding " << stoi(operand) << " to locctr" << endl;
       locctr += stoi(operand);
     }
     else if(opcode == BYTE) {
         int length;
-        string objcode = getEntitiesOfConst(operand, length); // find length of const, convert const to object code 
+        objcode = getEntitiesOfConst(operand, length); // find length of const, convert const to object code 
         locctr += length;
     }
 
@@ -108,6 +143,13 @@ int main() {
     // Add object code to text record ?
 
     */
+    if(isIndexed) {
+      int value = toDec(objcode);
+      value += toDec("8000");
+      objcode = toHex(value);
+    }
+    cout << "OBJCODE: " 
+          << ((opcode.substr(0, 3) == "RES")? "SKIP" : objcode) << endl;
 
     parser.getEntities(label, opcode, operand);
   }

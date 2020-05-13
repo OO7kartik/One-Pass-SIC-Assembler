@@ -35,10 +35,20 @@ void removeExtraSpaces(string& line) {
 string toHex(int s) {
   stringstream ss;
   ss << hex << s;
-  return ss.str();
+  string hexString = ss.str();
+  for(int i=0; i<hexString.length(); i++) hexString[i] = toupper(hexString[i]);
+  return hexString;
 }
 
-int lengthOfConst(const string &character_const, int &length) {
+int toDec(string s) {
+  stringstream ss;
+  int dec;
+  ss << s;
+  ss >> hex >> dec;
+  return dec;
+}
+
+int lengthOfConst(const string &character_const) {
   int div_factor = (character_const[0] == 'C') ? 1 : 2;
 
   return (character_const.size()-3) / div_factor;
@@ -62,7 +72,7 @@ bool canAccomodate(const string &current_record, int length) {
 }
 
 string getEntitiesOfConst(const string& operand, int &length) {
-  lengthOfConst(operand, length);
+  length = lengthOfConst(operand);
 
   string to_ret = "";
   if(operand[0] == 'X') {
@@ -78,4 +88,18 @@ string getEntitiesOfConst(const string& operand, int &length) {
   }
 
   return to_ret;
+}
+
+string padWithZeroes(const string& s, int length) {
+  int lengthToPad = max(0UL, length - s.length());
+  return string(lengthToPad, '0') + s;
+}
+
+bool nonIndexify(string& operand) {
+  int length = operand.length();
+  if (length>=3 && operand.substr(length-2, 2) == ",X") {
+    operand = operand.substr(0, length-2);
+    return true;
+  }
+  return false;
 }

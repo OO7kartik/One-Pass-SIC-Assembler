@@ -33,14 +33,15 @@ int Symtab::insert(string label, string adr = NOT_FOUND, bool force = false) {
   if(force) {
     table[label] = {adr};
   }
-  else if(situation == 2 && table[label][0] != NOT_FOUND) {
+  else if(situation == 1 && table[label][0] != NOT_FOUND) {
     cerr << "symbol already present in symtab" << endl;
     return 0;
   }
   else {
     table[label].push_back(adr);
   }
-
+  // print();
+  // cerr << "-------" << endl;
   return 1;
 }
 
@@ -65,7 +66,7 @@ void Symtab::print() {
   for(pair<string, vector<string>> itr : table) {
     cerr << itr.first << ": ";
     for(string s : itr.second) {
-      cerr << "-" << s << " ";
+      cerr << " - " << s << " ";
     }
     cerr << endl;
   }
