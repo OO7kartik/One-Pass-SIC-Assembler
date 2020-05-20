@@ -7,20 +7,21 @@ using namespace std;
 #include "headers/Symtab.hpp"
 
 
-int main() {
-  freopen("Files/debug.txt", "w", stderr); // debugin purpose
-  freopen("object_program.txt", "w", stdout);
+int main(int argc, char **argv) {
+  freopen("Files/debug.txt", "w", stderr); // debugging purpose
+  // freopen("object_program.txt", "w", stdout);
 
-  int locctr = 0;
-  bool isIndexed, force_new = false;
+  int locctr = 0, firstExec;
+  bool isIndexed, force_new = false, firstExecSet = false;
   string label, opcode, operand, objcode, symbolval;
   vector<string> object_program; //int: counts number of '^', string contains records
 
-  Parser parser("Files/input_program.txt");
+  string inputFilename = "Files/input_program.txt", outputFilename="output.txt";
+
+  Parser parser(inputFilename);
   Symtab symtab;
   Optab optab;
 
-  cerr << toHex(8247) << endl;
 
   // tried starting some work
   parser.getEntities(label, opcode, operand);
@@ -38,7 +39,7 @@ int main() {
     isIndexed = nonIndexify(operand);
     symbolval = string(4, '0');
 
-    cout << "\nLabel: " << label << endl;
+    // cout << "\nLabel: " << label << endl;
 
     if(label != EMPTY_STRING) {
         // vector<string> foundSymbolList = SYMTAB[LABEL]; // search SYMTAB for LABEL
@@ -46,7 +47,7 @@ int main() {
 
         if(symtab.check(label) != 0) // if found (entry exists)
         {
-            cout << "Entry exists for " << label << endl;
+            // cout << "Entry exists for " << label << endl;
             if(symtab.check(label) == 1) // if symbol value is NULL
             {
                 cerr << "For " << label << endl;
@@ -63,7 +64,7 @@ int main() {
 
                 for (int i = 1; i < list.size(); i++) // traverse list
                 {
-                    cout << "Replace " << toHex(stoi(list[i])) << endl;
+                    // cout << "Replace " << toHex(stoi(list[i])) << endl;
                     // WRITE NEW TEXT RECORD ?
                     writeTextRecord(object_program, toHex(locctr), toHex(stoi(list[i])), true);
                 }
@@ -74,16 +75,20 @@ int main() {
         }
         else 
         {
-          cout << label << ": Symbol value is updated to " << toHex(locctr) << endl;
+          // cout << label << ": Symbol value is updated to " << toHex(locctr) << endl;
           symtab.insert(label, to_string(locctr), true);
         }
         objcode = symtab.address(label);
     }
-    cout << "LOC: " << toHex(locctr) << endl;
+    // cout << "LOC: " << toHex(locctr) << endl;
 
     string code = optab.getCode(opcode); // search OPTAB for OPCODE
     // cout << "CODE: " << code << endl;
     if(code != EMPTY_STRING) {
+      if(!firstExecSet) {
+        firstExec = locctr;
+        firstExecSet = true;
+      }
       // vector<string> foundSymbolList = SYMTAB[OPERAND]; // search SYMTAB for OPERAND address
 
       if(operand!=EMPTY_STRING) {
@@ -153,11 +158,11 @@ int main() {
       value += toDec("8000");
       objcode = toHex(value);
     }
-    cout << "OBJCODE: " 
-          << ((opcode.substr(0, 3) == "RES")? "SKIP" : objcode) << endl;
+    // cout << "OBJCODE: " 
+    //       << ((opcode.substr(0, 3) == "RES")? "SKIP" : objcode) << endl;
 
     if(opcode.substr(0, 3) != "RES") {
-      cout << "writing: --- " << objcode << endl;
+      // cout << "writing: --- " << objcode << endl;
       if(force_new) {
         object_program.push_back("T^" + padWithZeroes(toHex(locctr), 6) + "^00^" + padWithZeroes(objcode, 6));
         force_new = false;
@@ -176,11 +181,12 @@ int main() {
   // write last listing line ????
 
   // opcode == END at this point
-  object_program.push_back("E^" + padWithZeroes(toHex(stoi(symtab.address(START))), 6));
+  // object_program.push_back("E^" + padWithZeroes(toHex(stoi(symtab.address(START))), 6));
+  object_program.push_back("E^" + padWithZeroes(toHex(firstExec), 6));
   //handle when characters are less, ie add padding
   object_program[0] += "^" + padWithZeroes(toHex(locctr-stoi(symtab.address(START))), 6);
   
-  vectorToFile(object_program, "answer.txt");
+  vectorToFile(object_program, outputFilename);
 
 
   
