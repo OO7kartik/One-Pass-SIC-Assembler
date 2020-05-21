@@ -7,6 +7,7 @@ public:
   int check(string label);
   string address(string label);
   vector<string> getLinkedList(string label);
+  void errorCheck(string file_name);
   void print();
 }; 
 
@@ -69,5 +70,14 @@ void Symtab::print() {
       cerr << " - " << s << " ";
     }
     cerr << endl;
+  }
+}
+
+void Symtab::errorCheck(string file_name) {
+  for(auto itr : table) {
+    if(itr.second.size() && itr.second[0] == NOT_FOUND) {
+      outputError(file_name);
+      break;
+    }
   }
 }

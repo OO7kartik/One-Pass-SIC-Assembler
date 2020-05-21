@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
   object_program[0] += "^" + padWithZeroes(toHex(locctr-stoi(symtab.address(START))), 6);
   
   vectorToFile(object_program, outputFilename);
-
+  symtab.errorCheck(outputFilename);
 
   
   /* ----------------------BELOW PART FOR TESTING PURPOSE--------------------- */

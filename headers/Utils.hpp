@@ -151,3 +151,9 @@ void vectorToFile(vector<string> &v, string file_name) {
 
   output_file.close();
 }
+
+void outputError(string file_name) {
+  ofstream output_file(file_name);
+  output_file << "Symtab incomplete, object program can't be generated" << endl;
+  output_file.close();
+}
