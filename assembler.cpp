@@ -16,14 +16,33 @@ int main(int argc, char **argv) {
   string label, opcode, operand, objcode, symbolval;
   vector<string> object_program; //int: counts number of '^', string contains records
 
-  string inputFilename = "Files/input_program.txt", outputFilename="output.txt";
+  string inputFilename, outputFilename;
+
+    // Parse args
+  if(argc < 3) {
+    cout << "FATAL: Too few arguments. Required 2." << endl;
+    return 0;
+  }
+  else {
+    if(argc > 3) {
+      cout << "WARNING: Too many arguments. Excess args will be ignored." << endl;
+    }
+    inputFilename = string(argv[1]);
+    outputFilename = string(argv[2]);
+    
+    ifstream file(inputFilename);
+    if(!file.good()) {
+      cout << "FATAL: Input file does not exist." << endl;
+      return 0;
+    }
+    file.close();
+  }
+
 
   Parser parser(inputFilename);
   Symtab symtab;
   Optab optab;
 
-
-  // tried starting some work
   parser.getEntities(label, opcode, operand);
 
   if(opcode == "START") {
