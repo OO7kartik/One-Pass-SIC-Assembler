@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
                 // END PREV RECORD IF INCOMPLETE ?
 
                 // foundSymbolList[0] = LOCCTR; // set LOCCTR as symbol value ?
-                symbolval = padWithZeroes(toHex(locctr), 6);
+                // symbolval = padWithZeroes(toHex(locctr), 6);
                 // cout << "Symbol value is updated to " << symbolval << endl;
 
                 vector<string> list = symtab.getLinkedList(label);
