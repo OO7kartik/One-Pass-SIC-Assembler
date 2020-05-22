@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
     if(opcode.substr(0, 3) != "RES") {
       // cout << "writing: --- " << objcode << endl;
       if(force_new) {
-        object_program.push_back("T^" + padWithZeroes(toHex(prev_locctr), 6) + "^00^" + padWithZeroes(objcode, 6));
+        object_program.push_back("T^" + padWithZeroes(toHex(prev_locctr), 6) + "^00^" + objcode);
         force_new = false;
       }
       else writeTextRecord(object_program, objcode, toHex(prev_locctr));
