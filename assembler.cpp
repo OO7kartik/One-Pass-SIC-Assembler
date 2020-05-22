@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     isIndexed = nonIndexify(operand);
     symbolval = string(4, '0');
 
-    cout << "\nLabel: " << label << endl;
+    // cout << "\nLabel: " << label << endl;
 
     if(label != EMPTY_STRING) {
         // vector<string> foundSymbolList = SYMTAB[LABEL]; // search SYMTAB for LABEL
@@ -69,10 +69,20 @@ int main(int argc, char **argv) {
             // cout << "Entry exists for " << label << endl;
             if(symtab.check(label) == 1) // if symbol value is NULL
             {
-                cerr << "For " << label << endl;
+                // cerr << "For " << label << endl;
                 symtab.print();
-                cerr << "-------" << endl;
+                // cerr << "-------" << endl;
                 // cout << "Symbol value is NULL" << endl;
+
+                if(opcode == WORD || opcode == RESW || opcode == RESB || opcode == BYTE) {
+                  // cout << "DEF=>Label: " << label << " Check: " << symtab.check(label) 
+                  //     << " Address: " << symtab.address(label) << endl;
+                  if( symtab.address(label)==NOT_FOUND ) {
+                    cout << "Error: Forward Reference used for Data Symbol: " << label << "\nAborting...\n";
+                    return 0;
+                  }
+                }
+
                 // END PREV RECORD IF INCOMPLETE ?
 
                 // foundSymbolList[0] = LOCCTR; // set LOCCTR as symbol value ?
@@ -80,8 +90,7 @@ int main(int argc, char **argv) {
                 // cout << "Symbol value is updated to " << symbolval << endl;
 
                 vector<string> list = symtab.getLinkedList(label);
-                for(auto s: list) cout  << s << " - ";
-                cout << endl;
+
                 for (int i = 1; i < list.size(); i++) // traverse list
                 {
                     // cout << "Replace " << toHex(stoi(list[i])) << endl;
@@ -114,13 +123,13 @@ int main(int argc, char **argv) {
       if(operand!=EMPTY_STRING) {
         if(symtab.check(operand) != 0) // if found (entry exists)
         {
-            cout << "Operand label found " << operand << endl;
+            // cout << "Operand label found " << operand << endl;
             if(symtab.address(operand) != NOT_FOUND) // if symbol value is not NULL
             {
-                cout << "OPERAND: " << operand << endl;
+                // cout << "OPERAND: " << operand << endl;
                 symbolval = toHex(stoi(symtab.address(operand))); // store symbol value as OPERAND address 
                 // cout << "Symbol value is updated to " << symbolval << endl;
-                cout << "Symbol value is not NULL: " << symbolval << endl;
+                // cout << "Symbol value is not NULL: " << symbolval << endl;
             }
             else
             {
@@ -158,18 +167,8 @@ int main(int argc, char **argv) {
         int length;
         objcode = getEntitiesOfConst(operand, length); // find length of const, convert const to object code 
         locctr += length;
-    }
-
-    if(opcode == WORD || opcode == RESW || opcode == RESB || opcode == BYTE) {
-      cout << "DEF=>Label: " << label << " Check: " << symtab.check(label) 
-           << " Address: " << symtab.address(label) << endl;
-      if( symtab.address(label)==NOT_FOUND ) {
-        cout << "Error: Forward Reference used for Data Symbol: " << opcode << "\n. Aborting...\n";
-        return 0;
-      }
     } 
 
-    cout << endl;
 
     /*
 
