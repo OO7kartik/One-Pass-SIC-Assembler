@@ -11,14 +11,14 @@ int main(int argc, char **argv) {
   freopen("Files/debug.txt", "w", stderr); // debugging purpose
   // freopen("object_program.txt", "w", stdout);
 
-  int locctr = 0, firstExec;
+  int locctr = 0, prev_locctr = 0, firstExec;
   bool isIndexed, force_new = false, firstExecSet = false;
   string label, opcode, operand, objcode, symbolval;
   vector<string> object_program; //int: counts number of '^', string contains records
 
   string inputFilename, outputFilename;
 
-    // Parse args
+  // Parse args
   if(argc < 3) {
     cout << "FATAL: Too few arguments. Required 2." << endl;
     return 0;
@@ -55,6 +55,7 @@ int main(int argc, char **argv) {
 
   parser.getEntities(label, opcode, operand);
   while(opcode != END) {
+    prev_locctr = locctr;
     isIndexed = nonIndexify(operand);
     symbolval = string(4, '0');
 
@@ -194,10 +195,10 @@ int main(int argc, char **argv) {
     if(opcode.substr(0, 3) != "RES") {
       // cout << "writing: --- " << objcode << endl;
       if(force_new) {
-        object_program.push_back("T^" + padWithZeroes(toHex(locctr-3), 6) + "^00^" + padWithZeroes(objcode, 6));
+        object_program.push_back("T^" + padWithZeroes(toHex(prev_locctr), 6) + "^00^" + padWithZeroes(objcode, 6));
         force_new = false;
       }
-      else writeTextRecord(object_program, objcode, toHex(locctr-3));
+      else writeTextRecord(object_program, objcode, toHex(prev_locctr));
     } 
     else {
       force_new = true;
