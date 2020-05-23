@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
     // cout << "LOC: " << locctr << endl; 
   }
   symtab.insert(START, to_string(locctr));
-  object_program.push_back("H^" + opcode + "^" + padWithZeroes( toHex(stoi(symtab.address(START))),6 ) );
+  object_program.push_back("H^" + padWithSpaces(label, 6) + "^" + padWithZeroes( toHex(stoi(symtab.address(START))),6 ) );
   object_program.push_back("T^" + padWithZeroes(toHex(locctr), 6) + "^00");
 
   parser.getEntities(label, opcode, operand);

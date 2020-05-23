@@ -102,6 +102,11 @@ string padWithZeroes(const string& s, int length) {
   return string(lengthToPad, '0') + s;
 }
 
+string padWithSpaces(const string& s, int length) {
+  int lengthToPad = max(0UL, length - s.length());
+  return s + string(lengthToPad, ' ');
+}
+
 bool nonIndexify(string& operand) {
   int length = operand.length();
   if (length>=3 && operand.substr(length-2, 2) == ",X") {
