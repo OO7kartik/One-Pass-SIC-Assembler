@@ -162,3 +162,9 @@ void outputError(string file_name) {
   output_file << "Symtab incomplete, object program can't be generated" << endl;
   output_file.close();
 }
+
+void dataSymbolError(string file_name, string label) {
+  ofstream output_file(file_name);
+  output_file << "Error: Forward Reference used for Data Symbol: " << label << "\nAborting...\n";
+  output_file.close();
+}
