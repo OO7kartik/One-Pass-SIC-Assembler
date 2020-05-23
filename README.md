@@ -25,14 +25,13 @@ To compile:
 g++ assembler.cpp -o assembler 
 ```
 
-To run:  
-```     
-./assembler <INPUTFILE> <OUTPUTFILE>
-```
-For example,
-```
-./assembler Files/input_program.txt output.txt
-```
+To run: 
+##### windows:   ```assembler.exe <INPUTFILE> <OUTPUTFILE>```
+##### linux:     ```./assembler <INPUTFILE> <OUTPUTFILE>```
+
+example for default program,
+##### windows: ```assembler.exe Files/input_program.txt output.txt```
+##### linux: ```./assembler Files/input_program.txt output.txt```
 
 ## Notes
  - Forward refrences for <strong>Data</strong> symbols are prohibited.  

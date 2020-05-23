@@ -98,12 +98,12 @@ string getEntitiesOfConst(const string& operand, int &length) {
 
 
 string padWithZeroes(const string& s, int length) {
-  int lengthToPad = max(0U, length - s.length());
+  int lengthToPad = max(0, int(length - s.length()));
   return string(lengthToPad, '0') + s;
 }
 
 string padWithSpaces(const string& s, int length) {
-  int lengthToPad = max(0U, length - s.length());
+  int lengthToPad = max(0, int(length - s.length()));
   return s + string(lengthToPad, ' ');
 }
 
