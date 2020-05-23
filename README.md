@@ -33,3 +33,7 @@ For example,
 ```
 ./assembler Files/input_program.txt output.txt
 ```
+
+## Notes
+ - Forward refrences for <strong>Data</strong> symbols are prohibited.  
+ - The first source line must be "START" line.
