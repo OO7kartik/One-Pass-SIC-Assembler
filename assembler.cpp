@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
     // cout << "LOC: " << locctr << endl; 
   }
   symtab.insert(START, to_string(locctr));
-  object_program.push_back("H^" + opcode + "^00" + toHex(stoi(symtab.address(START))));
+  object_program.push_back("H^" + opcode + "^" + padWithZeroes( toHex(stoi(symtab.address(START))),6 ) );
   object_program.push_back("T^" + padWithZeroes(toHex(locctr), 6) + "^00");
 
   parser.getEntities(label, opcode, operand);
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
             if(symtab.address(operand) != NOT_FOUND) // if symbol value is not NULL
             {
                 // cout << "OPERAND: " << operand << endl;
-                symbolval = toHex(stoi(symtab.address(operand))); // store symbol value as OPERAND address 
+                symbolval = padWithZeroes(toHex(stoi(symtab.address(operand))), 4); // store symbol value as OPERAND address 
                 // cout << "Symbol value is updated to " << symbolval << endl;
                 // cout << "Symbol value is not NULL: " << symbolval << endl;
             }
