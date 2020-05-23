@@ -11,14 +11,14 @@ int main(int argc, char **argv) {
   freopen("Files/debug.txt", "w", stderr); // debugging purpose
   // freopen("object_program.txt", "w", stdout);
 
-  int locctr = 0, firstExec;
+  int locctr = 0, prev_locctr = 0, firstExec;
   bool isIndexed, force_new = false, firstExecSet = false;
   string label, opcode, operand, objcode, symbolval;
   vector<string> object_program; //int: counts number of '^', string contains records
 
   string inputFilename, outputFilename;
 
-    // Parse args
+  // Parse args
   if(argc < 3) {
     cout << "FATAL: Too few arguments. Required 2." << endl;
     return 0;
@@ -50,11 +50,12 @@ int main(int argc, char **argv) {
     // cout << "LOC: " << locctr << endl; 
   }
   symtab.insert(START, to_string(locctr));
-  object_program.push_back("H^" + opcode + "^00" + toHex(stoi(symtab.address(START))));
+  object_program.push_back("H^" + padWithSpaces(label, 6) + "^" + padWithZeroes( toHex(stoi(symtab.address(START))),6 ) );
   object_program.push_back("T^" + padWithZeroes(toHex(locctr), 6) + "^00");
 
   parser.getEntities(label, opcode, operand);
   while(opcode != END) {
+    prev_locctr = locctr;
     isIndexed = nonIndexify(operand);
     symbolval = string(4, '0');
 
@@ -69,14 +70,24 @@ int main(int argc, char **argv) {
             // cout << "Entry exists for " << label << endl;
             if(symtab.check(label) == 1) // if symbol value is NULL
             {
-                cerr << "For " << label << endl;
+                // cerr << "For " << label << endl;
                 symtab.print();
-                cerr << "-------" << endl;
+                // cerr << "-------" << endl;
                 // cout << "Symbol value is NULL" << endl;
+
+                if(opcode == WORD || opcode == RESW || opcode == RESB || opcode == BYTE) {
+                  // cout << "DEF=>Label: " << label << " Check: " << symtab.check(label) 
+                  //     << " Address: " << symtab.address(label) << endl;
+                  if( symtab.address(label)==NOT_FOUND ) {
+                    cout << "Error: Forward Reference used for Data Symbol: " << label << "\nAborting...\n";
+                    return 0;
+                  }
+                }
+
                 // END PREV RECORD IF INCOMPLETE ?
 
                 // foundSymbolList[0] = LOCCTR; // set LOCCTR as symbol value ?
-                symbolval = padWithZeroes(toHex(locctr), 6);
+                // symbolval = padWithZeroes(toHex(locctr), 6);
                 // cout << "Symbol value is updated to " << symbolval << endl;
 
                 vector<string> list = symtab.getLinkedList(label);
@@ -117,7 +128,7 @@ int main(int argc, char **argv) {
             if(symtab.address(operand) != NOT_FOUND) // if symbol value is not NULL
             {
                 // cout << "OPERAND: " << operand << endl;
-                symbolval = toHex(stoi(symtab.address(operand))); // store symbol value as OPERAND address 
+                symbolval = padWithZeroes(toHex(stoi(symtab.address(operand))), 4); // store symbol value as OPERAND address 
                 // cout << "Symbol value is updated to " << symbolval << endl;
                 // cout << "Symbol value is not NULL: " << symbolval << endl;
             }
@@ -157,7 +168,8 @@ int main(int argc, char **argv) {
         int length;
         objcode = getEntitiesOfConst(operand, length); // find length of const, convert const to object code 
         locctr += length;
-    }
+    } 
+
 
     /*
 
@@ -183,10 +195,10 @@ int main(int argc, char **argv) {
     if(opcode.substr(0, 3) != "RES") {
       // cout << "writing: --- " << objcode << endl;
       if(force_new) {
-        object_program.push_back("T^" + padWithZeroes(toHex(locctr), 6) + "^00^" + padWithZeroes(objcode, 6));
+        object_program.push_back("T^" + padWithZeroes(toHex(prev_locctr), 6) + "^00^" + objcode);
         force_new = false;
       }
-      else writeTextRecord(object_program, objcode, toHex(locctr));
+      else writeTextRecord(object_program, objcode, toHex(prev_locctr));
     } 
     else {
       force_new = true;

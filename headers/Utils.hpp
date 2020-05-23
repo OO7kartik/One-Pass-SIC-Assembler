@@ -102,6 +102,11 @@ string padWithZeroes(const string& s, int length) {
   return string(lengthToPad, '0') + s;
 }
 
+string padWithSpaces(const string& s, int length) {
+  int lengthToPad = max(0UL, length - s.length());
+  return s + string(lengthToPad, ' ');
+}
+
 bool nonIndexify(string& operand) {
   int length = operand.length();
   if (length>=3 && operand.substr(length-2, 2) == ",X") {
@@ -130,7 +135,7 @@ void writeTextRecord(vector<string> &object_program, const string &object_code, 
 
 
   if(break_next_record == false && force_new_record == false && canAccomodate(object_program[object_program.size()-1], object_code.length())) {
-    object_program[object_program.size()-1] += "^" + padWithZeroes(object_code, 6);
+    object_program[object_program.size()-1] += "^" + object_code;
     updateTextRecordSize(object_program[object_program.size()-1]);
   } 
   else { // create new text_record       [create new reocrd when]: (size exeeds or forward reference aka:force_new_record)
