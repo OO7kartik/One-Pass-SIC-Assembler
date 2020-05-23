@@ -1,4 +1,3 @@
-For ENDFIL
 BUFFER:  - 4111 
 CLOOP:  - 8210 
 ENDFIL:  - ***  - 8220 
@@ -11,8 +10,6 @@ START:  - 4096
 THREE:  - 4099 
 WRREC:  - ***  - 8223 
 ZERO:  - 4102 
--------
-For RDREC
 BUFFER:  - 4111 
 CLOOP:  - 8210 
 ENDFIL:  - 8228 
@@ -27,8 +24,6 @@ START:  - 4096
 THREE:  - 4099 
 WRREC:  - ***  - 8223  - 8241 
 ZERO:  - 4102 
--------
-For EXIT
 BUFFER:  - 4111 
 CLOOP:  - 8210 
 ENDFIL:  - 8228 
@@ -45,8 +40,6 @@ START:  - 4096
 THREE:  - 4099 
 WRREC:  - ***  - 8223  - 8241 
 ZERO:  - 4102 
--------
-For WRREC
 BUFFER:  - 4111 
 CLOOP:  - 8210 
 ENDFIL:  - 8228 
@@ -64,4 +57,3 @@ START:  - 4096
 THREE:  - 4099 
 WRREC:  - ***  - 8223  - 8241 
 ZERO:  - 4102 
--------
